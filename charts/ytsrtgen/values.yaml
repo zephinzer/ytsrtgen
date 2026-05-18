@@ -1,5 +1,5 @@
 image:
-  repository: ytsrtgen
+  repository: aijutsudev/ytsrtgen
   tag: 20260518-cc1b1d75
   pullPolicy: IfNotPresent
 

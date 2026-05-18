@@ -12,15 +12,9 @@ definitions:
         example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
         type: string
     type: object
-  main.response:
-    properties:
-      srt:
-        description: Srt is the SRT-formatted subtitle content.
-        type: string
-    type: object
 info:
   contact: {}
-  description: Fetches auto-generated English SRT subtitles for a video URL via yt-dlp.
+  description: Fetches auto-generated English subtitles for a video URL via yt-dlp.
   title: ytsrtgen API
   version: "1.0"
 paths:
@@ -28,9 +22,17 @@ paths:
     post:
       consumes:
       - application/json
-      description: Runs yt-dlp against the supplied URL and returns the resulting
-        English SRT subtitles.
+      description: Runs yt-dlp against the supplied URL and returns the English subtitles
+        in the requested format.
       parameters:
+      - default: srt
+        description: Output format
+        enum:
+        - srt
+        - txt
+        in: query
+        name: format
+        type: string
       - description: Video URL
         in: body
         name: body
@@ -38,12 +40,12 @@ paths:
         schema:
           $ref: '#/definitions/main.request'
       produces:
-      - application/json
+      - text/plain
       responses:
         "200":
-          description: OK
+          description: Subtitle content in the requested format
           schema:
-            $ref: '#/definitions/main.response'
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -52,5 +54,5 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/main.errorResponse'
-      summary: Generate SRT for a video URL
+      summary: Generate subtitles for a video URL
 swagger: "2.0"

@@ -111,24 +111,23 @@ KUBE_CONTEXT   ?=
 
 HELM_CTX_FLAG     := $(if $(KUBE_CONTEXT),--kube-context $(KUBE_CONTEXT),)
 HELM_VALUES_FLAG  := $(if $(HELM_VALUES),-f $(HELM_VALUES),)
-HELM_IMAGE_FLAGS  := --set image.repository=$(IMAGE_REF) --set image.tag=$(TAG)
 
 .PHONY: helm-lint
 helm-lint: ## Lint the Helm chart
-	helm lint $(HELM_CHART) $(HELM_VALUES_FLAG) $(HELM_IMAGE_FLAGS)
+	helm lint $(HELM_CHART) $(HELM_VALUES_FLAG)
 
 .PHONY: helm-template
 helm-template: ## Render the chart locally (no cluster contact)
 	helm template $(HELM_RELEASE) $(HELM_CHART) \
 		--namespace $(HELM_NAMESPACE) \
-		$(HELM_VALUES_FLAG) $(HELM_IMAGE_FLAGS)
+		$(HELM_VALUES_FLAG)
 
 .PHONY: helm-diff
 helm-diff: ## Show what would change vs. the live release (requires helm-diff plugin)
 	helm diff upgrade $(HELM_RELEASE) $(HELM_CHART) \
 		$(HELM_CTX_FLAG) \
 		--namespace $(HELM_NAMESPACE) \
-		$(HELM_VALUES_FLAG) $(HELM_IMAGE_FLAGS) \
+		$(HELM_VALUES_FLAG) \
 		--allow-unreleased
 
 .PHONY: helm-deploy
@@ -136,8 +135,8 @@ helm-deploy: ## Install or upgrade the release on the current cluster
 	helm upgrade --install $(HELM_RELEASE) $(HELM_CHART) \
 		$(HELM_CTX_FLAG) \
 		--namespace $(HELM_NAMESPACE) --create-namespace \
-		$(HELM_VALUES_FLAG) $(HELM_IMAGE_FLAGS) \
-		--atomic --wait
+		$(HELM_VALUES_FLAG) \
+		--rollback-on-failure --wait
 
 .PHONY: helm-uninstall
 helm-uninstall: ## Remove the release from the current cluster

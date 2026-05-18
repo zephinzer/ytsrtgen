@@ -17,15 +17,26 @@ const docTemplate = `{
     "paths": {
         "/": {
             "post": {
-                "description": "Runs yt-dlp against the supplied URL and returns the resulting English SRT subtitles.",
+                "description": "Runs yt-dlp against the supplied URL and returns the English subtitles in the requested format.",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "text/plain"
                 ],
-                "summary": "Generate SRT for a video URL",
+                "summary": "Generate subtitles for a video URL",
                 "parameters": [
+                    {
+                        "enum": [
+                            "srt",
+                            "txt"
+                        ],
+                        "type": "string",
+                        "default": "srt",
+                        "description": "Output format",
+                        "name": "format",
+                        "in": "query"
+                    },
                     {
                         "description": "Video URL",
                         "name": "body",
@@ -38,9 +49,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Subtitle content in the requested format",
                         "schema": {
-                            "$ref": "#/definitions/main.response"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -77,15 +88,6 @@ const docTemplate = `{
                     "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 }
             }
-        },
-        "main.response": {
-            "type": "object",
-            "properties": {
-                "srt": {
-                    "description": "Srt is the SRT-formatted subtitle content.",
-                    "type": "string"
-                }
-            }
         }
     }
 }`
@@ -97,7 +99,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "ytsrtgen API",
-	Description:      "Fetches auto-generated English SRT subtitles for a video URL via yt-dlp.",
+	Description:      "Fetches auto-generated English subtitles for a video URL via yt-dlp.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
