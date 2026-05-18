@@ -1,6 +1,6 @@
 image:
   repository: ytsrtgen
-  tag: latest
+  tag: 20260518-cc1b1d75
   pullPolicy: IfNotPresent
 
 ports:
@@ -12,5 +12,5 @@ resources:
     cpu: 100m
     memory: 128Mi
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 200m
+    memory: 256Mi
