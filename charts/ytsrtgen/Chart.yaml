@@ -1,0 +1,6 @@
+apiVersion: v2
+name: ytsrtgen
+description: HTTP service that generates SRT subtitles from YouTube videos via yt-dlp.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
