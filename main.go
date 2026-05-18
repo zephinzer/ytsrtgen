@@ -102,6 +102,7 @@ func handleGenerate(w http.ResponseWriter, r *http.Request) {
 
 	cmd := exec.CommandContext(r.Context(),
 		"yt-dlp",
+		"--remote-components", "ejs:github",
 		"--skip-download",
 		"--write-auto-subs",
 		"--sub-lang", "en",
