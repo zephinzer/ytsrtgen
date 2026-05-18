@@ -17,6 +17,7 @@ RUN apk add --no-cache \
         python3 \
         py3-pip \
         ca-certificates \
+        deno \
         tini \
     && addgroup -S app \
     && adduser -S -G app -h /home/app -s /sbin/nologin app \
