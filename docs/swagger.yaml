@@ -1,0 +1,56 @@
+basePath: /
+definitions:
+  main.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  main.request:
+    properties:
+      data:
+        description: Data is the video URL to fetch subtitles for.
+        example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        type: string
+    type: object
+  main.response:
+    properties:
+      srt:
+        description: Srt is the SRT-formatted subtitle content.
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Fetches auto-generated English SRT subtitles for a video URL via yt-dlp.
+  title: ytsrtgen API
+  version: "1.0"
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: Runs yt-dlp against the supplied URL and returns the resulting
+        English SRT subtitles.
+      parameters:
+      - description: Video URL
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.errorResponse'
+      summary: Generate SRT for a video URL
+swagger: "2.0"

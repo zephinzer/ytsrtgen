@@ -10,13 +10,23 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
+
+	_ "zephinzer/ytsrtgen/docs"
 )
 
+// @title           ytsrtgen API
+// @version         1.0
+// @description     Fetches auto-generated English SRT subtitles for a video URL via yt-dlp.
+// @BasePath        /
+
 type request struct {
-	Data string `json:"data"`
+	// Data is the video URL to fetch subtitles for.
+	Data string `json:"data" example:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"`
 }
 
 type response struct {
+	// Srt is the SRT-formatted subtitle content.
 	Srt string `json:"srt"`
 }
 
@@ -30,6 +40,16 @@ func writeError(w http.ResponseWriter, status int, msg string) {
 	_ = json.NewEncoder(w).Encode(errorResponse{Error: msg})
 }
 
+// handleGenerate godoc
+// @Summary      Generate SRT for a video URL
+// @Description  Runs yt-dlp against the supplied URL and returns the resulting English SRT subtitles.
+// @Accept       json
+// @Produce      json
+// @Param        body  body      request        true  "Video URL"
+// @Success      200   {object}  response
+// @Failure      400   {object}  errorResponse
+// @Failure      500   {object}  errorResponse
+// @Router       / [post]
 func handleGenerate(w http.ResponseWriter, r *http.Request) {
 	var req request
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -93,6 +113,10 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", handleGenerate).Methods(http.MethodPost)
+	r.PathPrefix("/swagger/").Handler(httpSwagger.WrapHandler)
+	r.HandleFunc("/swagger", func(w http.ResponseWriter, req *http.Request) {
+		http.Redirect(w, req, "/swagger/index.html", http.StatusFound)
+	})
 
 	log.Printf("listening on %s", addr)
 	if err := http.ListenAndServe(addr, r); err != nil {

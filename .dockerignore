@@ -1,0 +1,38 @@
+# VCS
+.git
+.gitignore
+.gitattributes
+
+# Editor / IDE / OS
+.claude
+.idea
+.vscode
+.DS_Store
+*.swp
+*.swo
+
+# Build output
+/bin
+/out
+/dist
+vendor
+
+# Go test / coverage artifacts
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# Docs and meta (not needed in the image)
+README.md
+LICENSE
+Makefile
+Dockerfile
+.dockerignore
+
+# Deployment manifests (not needed in the image)
+charts
+
+# Local env files
+.env
+.env.*
