@@ -1,6 +1,6 @@
 image:
   repository: aijutsudev/ytsrtgen
-  tag: 20260518-cec94115
+  tag: 20260518-403b048a
   pullPolicy: IfNotPresent
 
 ports:
